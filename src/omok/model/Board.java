@@ -1,5 +1,8 @@
 package omok.model;
 import omok.model.Player;
+import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 /**
  * Abstraction of an Omok board, which consists of n x n intersections
  * or places where players can place their stones. The board can be
@@ -10,17 +13,20 @@ import omok.model.Player;
  */
 public class Board {
     Place[][] intersections;
-    int size;
+    private int size;
+    private List<Place> winningRow;
 
     /** Create a new board of the default size. */
     public Board() {
         this.size=15;
         intersections = new Place[size][size];
+        winningRow = new ArrayList<Place>();
     }
     /** Create a new board of the specified size. */
     public Board(int size) {
         this.size=size;
         intersections = new Place[size][size];
+        winningRow = new ArrayList<Place>();
     }
     /** Return the size of this board. */
     public int size() {
@@ -57,6 +63,8 @@ public class Board {
      */
     public void placeStone(int x, int y, Player player) {
         intersections[y-1][x-1].setPlayer(player);
+        player.setX(x-1);
+        player.setY(y-1);
     }
 
     /**
@@ -116,11 +124,222 @@ public class Board {
      * a horizontal, vertical, or diagonal direction.
      */
     public boolean isWonBy(Player player) {
+        //variables to store the length of vertical row, horizontal row, and diagonal row
+        int diagonalCount=1;
+        int verticalCount=1;
+        int horizontalCount=1;
+
+        //variables used to traverse through intersections on board
+        int xTemp=0;
+        int yTemp=0;
+
+        //variables to tell if the stone has any diagonal neighboring stones
+        boolean hasUpLeft;
+        boolean hasDownRight;
+        //variables to tell if the stone has any diagonal neighboring stones
+        boolean hasUpRight;
+        boolean hasDownLeft;
+        //variables to tell if the stone has any vertical neighboring stones
+        boolean hasUp;
+        boolean hasDown;
+        ////variables to tell if the stone has any horizontal neighboring stones
+        boolean hasLeft;
+        boolean hasRight;
+
+
+        int x = player.getX();
+        int y = player.getY();
+        int length=5;
+        Place stone=intersections[player.getY()][player.getX()];
+
+
+
+
+
+
+
+
+        //FIX: WE ARE ONLY CHECKING IF WE ARE AT THE TOP LEFT EDGE, BUT WE SHOULD BE CHECKING IN GENERAL IF WE ARE AT THE LEFT EDGE INSTEAD SINCE WERE MOVING TOP LEFT DIAGONALLY
+        //CHECK FOR DIAGONAL ROW #1
+        xTemp=player.getX();
+        yTemp=player.getY();
+        //stone has diagonal row up/left and is not at the top left of board, start counting
+        if((y!=(size-1)&&x!=0) && intersections[y+1][x-1].getPlayer()==stone.getPlayer()){
+            hasUpLeft=true;
+            while(hasUpLeft){
+                //if the stone to the up/left does not belong to player or if we are at the top left edge of board, stop counting
+                if((yTemp==(size-1)&&xTemp==0) || intersections[yTemp+1][xTemp-1].getPlayer()!=stone.getPlayer()){
+                    hasUpLeft=false;
+                    break;
+                }
+                winningRow.add(intersections[yTemp][xTemp]);
+                yTemp+=1;
+                xTemp-=1;
+                diagonalCount+=1;
+            }
+        }
+        //has diagonal row down/right
+        xTemp=player.getX();
+        yTemp=player.getY();
+        //if we are not at bottom right edge of board and the bottom/right neigboring stone belongs to player, start counting
+        if((y!=0&&x!=(size-1)) && intersections[y-1][x+1].getPlayer()==stone.getPlayer()){
+            hasDownRight=true;
+            while(hasDownRight){
+                //if the stone to the down/right does not belong to player or if we are at the bottom right edge of board, stop counting
+                if((yTemp==0&&xTemp==(size-1)) || intersections[yTemp-1][xTemp+1].getPlayer()!=stone.getPlayer()){
+                    hasDownRight=false;
+                    break;
+                }
+                winningRow.add(intersections[yTemp][xTemp]);
+                yTemp-=1;
+                xTemp+=1;
+                diagonalCount+=1;
+            }
+        }
+        //if we found 5 stones placed diagonally
+        if(diagonalCount>=length){
+            return true;
+        }
+
+
+        //CHECK FOR DIAGONAL ROW #2
+        winningRow.clear();
+        xTemp=player.getX();
+        yTemp=player.getY();
+        diagonalCount=5;
+        //if we are not at the top right edge of board and the neighboring top/right stone belongs to player, start counting
+        if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
+            hasUpRight=true;
+            while(hasUpRight){
+                //if the stone to the top/right does not belong to player or if we are at the top right edge of board, stop counting
+                if((yTemp==(size-1)&&xTemp==(size-1))||intersections[yTemp+1][xTemp+1].getPlayer()!=stone.getPlayer()){
+                    hasUpRight=false;
+                    break;
+                }
+                winningRow.add(intersections[yTemp][xTemp]);
+                yTemp+=1;
+                xTemp+=1;
+                diagonalCount+=1;
+            }
+        }
+        //has diagonal row down/left
+        xTemp=player.getX();
+        yTemp=player.getY();
+        //if we are not at the bottom left edge of board and bottom/left neighboring stone belongs to player, start counting
+        if((y!=0&&x!=0) && intersections[y-1][x-1].getPlayer()==stone.getPlayer()){
+            hasDownLeft=true;
+            while(hasDownLeft){
+                //if the stone to the left does not belong to player or if we are at the right edge of board, stop counting
+                if((yTemp==0&&xTemp==0)||intersections[yTemp-1][xTemp-1].getPlayer()!=stone.getPlayer()){
+                    hasDownLeft=false;
+                    break;
+                }
+                winningRow.add(intersections[yTemp][xTemp]);
+                yTemp-=1;
+                xTemp-=1;
+                diagonalCount+=1;
+            }
+        }
+        //if we found 5 stones placed diagonally
+        if(diagonalCount>=length){
+            return true;
+        }
+
+
+        //CHECK FOR VERTICAL ROW
+        winningRow.clear();
+        xTemp=player.getX();
+        yTemp=player.getY();
+        //if we are not at the top edge of board and the neighboring top stone belongs to player, start counting
+        if(y!=(size-1) && intersections[y+1][x].getPlayer()==stone.getPlayer()){
+            hasUp=true;
+            while(hasUp){
+                //if we are at the top of the board or if the top neighboring stone doesnt belong to player, stop counting
+                if(yTemp==(size-1)||intersections[yTemp+1][xTemp].getPlayer()!=stone.getPlayer()){
+                    hasUp=false;
+                    break;
+                }
+                winningRow.add(intersections[yTemp][xTemp]);
+                yTemp+=1;
+                verticalCount+=1;
+            }
+        }
+        //has down
+        xTemp=player.getX();
+        yTemp=player.getY();
+        //if we are not at the bottom edge of board and the neighboring bottome stone belongs to player, start counting
+        if(y!=0 && intersections[y-1][x].getPlayer()==stone.getPlayer()){
+            hasDown=true;
+            while(hasDown){
+                //if the stone to the left does not belong to player or if we are at the right edge of board, stop counting
+                if(yTemp==0 || intersections[yTemp-1][xTemp].getPlayer()!=stone.getPlayer()){
+                    hasDown=false;
+                    break;
+                }
+                winningRow.add(intersections[yTemp][xTemp]);
+                yTemp-=1;
+                verticalCount+=1;
+            }
+        }
+        //if we found 5 stones placed vertically
+        if(verticalCount>=length){
+            return true;
+        }
+
+
+        //CHECK FOR HORIZONTAL ROW
+        winningRow.clear();
+        xTemp=player.getX();
+        yTemp=player.getY();
+        //if the intersection to left of the stone belongs to player and stone is not on the left edge of board, start counting
+        if(x!=0 && intersections[y][x-1].getPlayer()==stone.getPlayer()){//
+            hasLeft=true;
+            while(hasLeft){
+                //if the stone to the left does not belong to player or if we are at the left edge of board, stop counting
+                if(xTemp==0 || intersections[yTemp][xTemp-1].getPlayer()!=stone.getPlayer()){
+                    hasLeft=false;
+                    break;
+                }
+                winningRow.add(intersections[yTemp][xTemp]);
+                xTemp-=1;
+                horizontalCount+=1;
+            }
+        }
+        //if the intersection to the right of the stone belongs to player and stone is not on the right edge of board, start counting
+        xTemp=player.getX();
+        yTemp=player.getY();
+        if(x!=(size-1) && intersections[y][x+1].getPlayer()==stone.getPlayer()){//el orden
+            hasRight=true;
+            while(hasRight){
+                //if the stone to the left does not belong to player or if we are at the right edge of board, stop counting
+                if(xTemp==(size-1)||intersections[yTemp][xTemp+1].getPlayer()!=stone.getPlayer()){
+                    hasRight=false;
+                    break;
+                }
+                winningRow.add(intersections[yTemp][xTemp]);
+                xTemp+=1;
+                horizontalCount+=1;
+            }
+        }
+        //if we found 5 stones placed horizontally
+        if(horizontalCount>=length){
+            return true;
+        }
+
+        //if we didnt find a row of 5
+        winningRow.clear();
+        return false;
+
+
     }
     /** Return the winning row. For those who are not familiar with
      * the Iterable interface, you may return an object of
      * List<Place>. */
-    public Iterable<Place> winningRow() {
+    public List<Place> winningRow() {
+        return winningRow;
+    }
+    public Place[][] getIntersections(){
+        return intersections;
     }
     /**
      * An intersection on an Omok board identified by its 0-based column
