@@ -1,6 +1,7 @@
 package omok.model;
 import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -133,13 +134,13 @@ class BoardTest {
 
         omok.clear();
 
-        // Simulate a vertical row of 5 touching the top edge (7, 0 to 7, 4)
-        omok.placeStone(7, 0, andre);
+        // Simulate a vertical row of 5 touching the top edge (7, 1 to 7, 5)
         omok.placeStone(7, 1, andre);
         omok.placeStone(7, 2, andre);
-        assertFalse(omok.isWonBy(andre));
         omok.placeStone(7, 3, andre);
+        assertFalse(omok.isWonBy(andre));
         omok.placeStone(7, 4, andre);
+        omok.placeStone(7, 5, andre);
         assertTrue(omok.isWonBy(andre));
 
         omok.clear();
@@ -155,14 +156,16 @@ class BoardTest {
 
         omok.clear();
 
-        // Simulate a horizontal row of 5 touching the left edge (0, 6 to 4, 6)
-        omok.placeStone(0, 6, andre);
-        assertFalse(omok.isWonBy(andre));
+        // Simulate a horizontal row of 5 touching the left edge (1, 6 to 5, 6)
         omok.placeStone(1, 6, andre);
+        assertFalse(omok.isWonBy(andre));
         omok.placeStone(2, 6, andre);
         omok.placeStone(3, 6, andre);
         omok.placeStone(4, 6, andre);
+        omok.placeStone(5, 6, andre);
         assertTrue(omok.isWonBy(andre));
+
+        omok.clear();
 
         // Simulate a diagonal row of 5 from (4, 4) to (8, 8) (northwest to southeast)
         assertFalse(omok.isWonBy(andre));
@@ -186,25 +189,27 @@ class BoardTest {
 
         omok.clear();
 
-        // Simulate a diagonal row of 5 touching the top left edge (0, 0 to 4, 4) (northwest to southeast)
-        omok.placeStone(0, 0, andre);
+        // Simulate a diagonal row of 5 touching the top left edge (1, 1 to 5, 5) (northwest to southeast)
         omok.placeStone(1, 1, andre);
         omok.placeStone(2, 2, andre);
         omok.placeStone(3, 3, andre);
-        assertFalse(omok.isWonBy(andre));
         omok.placeStone(4, 4, andre);
+        assertFalse(omok.isWonBy(andre));
+        omok.placeStone(5, 5, andre);
         assertTrue(omok.isWonBy(andre));
 
         omok.clear();
 
-        // Simulate a diagonal row of 5 touching the top right edge (0, 14 to 4, 10) (northeast to southwest)
-        omok.placeStone(0, 14, andre);
-        omok.placeStone(1, 13, andre);
-        omok.placeStone(2, 12, andre);
+        // Simulate a diagonal row of 5 touching the top right edge (1, 14 to 5, 10) (northeast to southwest)
+        omok.placeStone(1, 14, andre);
+        omok.placeStone(2, 13, andre);
+        omok.placeStone(3, 12, andre);
         assertFalse(omok.isWonBy(andre));
-        omok.placeStone(3, 11, andre);
-        omok.placeStone(4, 10, andre);
+        omok.placeStone(4, 11, andre);
+        omok.placeStone(5, 10, andre);
         assertTrue(omok.isWonBy(andre));
+
+
     }
 
     @org.junit.jupiter.api.Test
@@ -277,5 +282,7 @@ class BoardTest {
 
         assertTrue(row.containsAll(expectedRow));
     }
+
+
 
 }

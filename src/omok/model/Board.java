@@ -43,9 +43,9 @@ public class Board {
      * on the board are occupied or not.
      */
     public boolean isFull() {
-        for(int i=0;i< intersections.length;i++){
-            for(int j=0;i< intersections[i].length;j++){
-                if(intersections[i][j].getPlayer()==null){
+        for(int i=0;i< size;i++){
+            for(int j=0;j< size;j++){
+                if(intersections[i][j]==null){
                     return false;
                 }
             }
@@ -62,6 +62,8 @@ public class Board {
      * @param player Player whose stone is to be placed
      */
     public void placeStone(int x, int y, Player player) {
+        Place stone = new Place(x,y);
+        intersections[y-1][x-1]=stone;
         intersections[y-1][x-1].setPlayer(player);
         player.setX(x-1);
         player.setY(y-1);
@@ -75,7 +77,7 @@ public class Board {
      * @param y 0-based row (horizontal) index
      */
     public boolean isEmpty(int x, int y) {
-        if(intersections[y-1][x-1].getPlayer()==null){
+        if(intersections[y-1][x-1]==null){
             return true;
         }
         return false;
@@ -88,6 +90,9 @@ public class Board {
      * @param y 0-based row (horizontal) index
      */
     public boolean isOccupied(int x, int y) {
+        if(intersections[y-1][x-1]==null){
+            return false;
+        }
         if(intersections[y-1][x-1].getPlayer()!=null){
             return true;
         }
@@ -102,6 +107,9 @@ public class Board {
      * @param y 0-based row (horizontal) index
      */
     public boolean isOccupiedBy(int x, int y, Player player) {
+        if(intersections[y-1][x-1]==null){
+            return false;
+        }
         if(intersections[y-1][x-1].getPlayer()==player){
             return true;
         }
@@ -115,6 +123,9 @@ public class Board {
      * @param y 0-based row (horizontal) index
      */
     public Player playerAt(int x, int y) {
+        if(intersections[y-1][x-1]==null){
+            return null;
+        }
         return intersections[y-1][x-1].getPlayer();
     }
     /**
@@ -164,11 +175,12 @@ public class Board {
         xTemp=player.getX();
         yTemp=player.getY();
         //stone has diagonal row up/left and is not at the top left of board, start counting
-        if((y!=(size-1)&&x!=0) && intersections[y+1][x-1].getPlayer()==stone.getPlayer()){
+        if((y!=(size-1)&&x!=0) && intersections[y+1][x-1]!=null&&intersections[y+1][x-1].getPlayer()==stone.getPlayer()){
             hasUpLeft=true;
             while(hasUpLeft){
                 //if the stone to the up/left does not belong to player or if we are at the top left edge of board, stop counting
-                if((yTemp==(size-1)&&xTemp==0) || intersections[yTemp+1][xTemp-1].getPlayer()!=stone.getPlayer()){
+                //if((yTemp==(size-1)&&xTemp==0) || intersections[yTemp+1][xTemp-1].getPlayer()!=stone.getPlayer()){
+                if((yTemp==(size-1)||xTemp==0) || intersections[yTemp+1][xTemp-1]==null|| intersections[yTemp+1][xTemp-1].getPlayer()!=stone.getPlayer()){
                     hasUpLeft=false;
                     break;
                 }
@@ -182,11 +194,13 @@ public class Board {
         xTemp=player.getX();
         yTemp=player.getY();
         //if we are not at bottom right edge of board and the bottom/right neigboring stone belongs to player, start counting
-        if((y!=0&&x!=(size-1)) && intersections[y-1][x+1].getPlayer()==stone.getPlayer()){
+        //if((y!=0&&x!=(size-1)) && intersections[y-1][x+1].getPlayer()==stone.getPlayer()){
+        if((y!=0&&x!=(size-1)) && intersections[y-1][x+1]!=null && intersections[y-1][x+1].getPlayer()==stone.getPlayer()){
             hasDownRight=true;
             while(hasDownRight){
                 //if the stone to the down/right does not belong to player or if we are at the bottom right edge of board, stop counting
-                if((yTemp==0&&xTemp==(size-1)) || intersections[yTemp-1][xTemp+1].getPlayer()!=stone.getPlayer()){
+                if((yTemp==0||xTemp==(size-1)) ||intersections[yTemp-1][xTemp+1]==null|| intersections[yTemp-1][xTemp+1].getPlayer()!=stone.getPlayer()){
+                //if((yTemp==0&&xTemp==(size-1)) || intersections[yTemp-1][xTemp+1].getPlayer()!=stone.getPlayer()){
                     hasDownRight=false;
                     break;
                 }
@@ -198,6 +212,7 @@ public class Board {
         }
         //if we found 5 stones placed diagonally
         if(diagonalCount>=length){
+            System.out.println("diagonal row found");
             return true;
         }
 
@@ -206,13 +221,15 @@ public class Board {
         winningRow.clear();
         xTemp=player.getX();
         yTemp=player.getY();
-        diagonalCount=5;
+        diagonalCount=1;
         //if we are not at the top right edge of board and the neighboring top/right stone belongs to player, start counting
-        if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
+        if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1]!=null && intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
+        //if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
             hasUpRight=true;
             while(hasUpRight){
                 //if the stone to the top/right does not belong to player or if we are at the top right edge of board, stop counting
-                if((yTemp==(size-1)&&xTemp==(size-1))||intersections[yTemp+1][xTemp+1].getPlayer()!=stone.getPlayer()){
+                if((yTemp==(size-1)||xTemp==(size-1))||intersections[yTemp+1][xTemp+1]==null||intersections[yTemp+1][xTemp+1].getPlayer()!=stone.getPlayer()){
+                //if((yTemp==(size-1)&&xTemp==(size-1))||intersections[yTemp+1][xTemp+1].getPlayer()!=stone.getPlayer()){
                     hasUpRight=false;
                     break;
                 }
@@ -226,11 +243,13 @@ public class Board {
         xTemp=player.getX();
         yTemp=player.getY();
         //if we are not at the bottom left edge of board and bottom/left neighboring stone belongs to player, start counting
-        if((y!=0&&x!=0) && intersections[y-1][x-1].getPlayer()==stone.getPlayer()){
+        if((y!=0&&x!=0) && intersections[y-1][x-1]!=null &&intersections[y-1][x-1].getPlayer()==stone.getPlayer()){
+        //if((y!=0&&x!=0) && intersections[y-1][x-1].getPlayer()==stone.getPlayer()){
             hasDownLeft=true;
             while(hasDownLeft){
                 //if the stone to the left does not belong to player or if we are at the right edge of board, stop counting
-                if((yTemp==0&&xTemp==0)||intersections[yTemp-1][xTemp-1].getPlayer()!=stone.getPlayer()){
+                //if((yTemp==0&&xTemp==0)||intersections[yTemp-1][xTemp-1].getPlayer()!=stone.getPlayer()){
+                if((yTemp==0||xTemp==0)||intersections[yTemp-1][xTemp-1]==null||intersections[yTemp-1][xTemp-1].getPlayer()!=stone.getPlayer()){
                     hasDownLeft=false;
                     break;
                 }
@@ -242,6 +261,7 @@ public class Board {
         }
         //if we found 5 stones placed diagonally
         if(diagonalCount>=length){
+            System.out.println("diagonal row found");
             return true;
         }
 
@@ -251,13 +271,16 @@ public class Board {
         xTemp=player.getX();
         yTemp=player.getY();
         //if we are not at the top edge of board and the neighboring top stone belongs to player, start counting
-        if(y!=(size-1) && intersections[y+1][x].getPlayer()==stone.getPlayer()){
+        //if(y!=(size-1) && intersections[y+1][x].getPlayer()==stone.getPlayer()){
+        if(y!=(size-1) && intersections[y+1][x]!=null&&intersections[y+1][x].getPlayer()==player){
             hasUp=true;
             while(hasUp){
                 //if we are at the top of the board or if the top neighboring stone doesnt belong to player, stop counting
-                if(yTemp==(size-1)||intersections[yTemp+1][xTemp].getPlayer()!=stone.getPlayer()){
+                //if(yTemp==(size-1)||intersections[yTemp+1][xTemp].getPlayer()!=stone.getPlayer()){
+                if(yTemp==(size-1)||intersections[yTemp+1][xTemp]==null||intersections[yTemp+1][xTemp].getPlayer()!=stone.getPlayer()){
                     hasUp=false;
                     break;
+
                 }
                 winningRow.add(intersections[yTemp][xTemp]);
                 yTemp+=1;
@@ -268,11 +291,13 @@ public class Board {
         xTemp=player.getX();
         yTemp=player.getY();
         //if we are not at the bottom edge of board and the neighboring bottome stone belongs to player, start counting
-        if(y!=0 && intersections[y-1][x].getPlayer()==stone.getPlayer()){
+        //if(y!=0 && intersections[y-1][x].getPlayer()==stone.getPlayer()){
+        if(y!=0 && intersections[y-1][x]!=null&&intersections[y-1][x].getPlayer()==stone.getPlayer()){
             hasDown=true;
             while(hasDown){
                 //if the stone to the left does not belong to player or if we are at the right edge of board, stop counting
-                if(yTemp==0 || intersections[yTemp-1][xTemp].getPlayer()!=stone.getPlayer()){
+                //if(yTemp==0 || intersections[yTemp-1][xTemp].getPlayer()!=stone.getPlayer()){
+                if(yTemp==0 || intersections[yTemp-1][xTemp]==null||intersections[yTemp-1][xTemp].getPlayer()!=player){
                     hasDown=false;
                     break;
                 }
@@ -283,6 +308,7 @@ public class Board {
         }
         //if we found 5 stones placed vertically
         if(verticalCount>=length){
+            System.out.println("vertical row found");
             return true;
         }
 
@@ -292,11 +318,13 @@ public class Board {
         xTemp=player.getX();
         yTemp=player.getY();
         //if the intersection to left of the stone belongs to player and stone is not on the left edge of board, start counting
-        if(x!=0 && intersections[y][x-1].getPlayer()==stone.getPlayer()){//
+        //if(x!=0 && intersections[y][x-1].getPlayer()==stone.getPlayer()){//
+        if(x!=0 && intersections[y][x-1]!=null&&intersections[y][x-1].getPlayer()==stone.getPlayer()){
             hasLeft=true;
             while(hasLeft){
                 //if the stone to the left does not belong to player or if we are at the left edge of board, stop counting
-                if(xTemp==0 || intersections[yTemp][xTemp-1].getPlayer()!=stone.getPlayer()){
+                //if(xTemp==0 || intersections[yTemp][xTemp-1].getPlayer()!=stone.getPlayer()){
+                if(xTemp==0 || intersections[yTemp][xTemp-1]==null||intersections[yTemp][xTemp-1].getPlayer()!=stone.getPlayer()){
                     hasLeft=false;
                     break;
                 }
@@ -308,11 +336,13 @@ public class Board {
         //if the intersection to the right of the stone belongs to player and stone is not on the right edge of board, start counting
         xTemp=player.getX();
         yTemp=player.getY();
-        if(x!=(size-1) && intersections[y][x+1].getPlayer()==stone.getPlayer()){//el orden
+        //if(x!=(size-1) && intersections[y][x+1].getPlayer()==stone.getPlayer()){//el orden
+        if(x!=(size-1) && intersections[y][x+1]!=null&&intersections[y][x+1].getPlayer()==stone.getPlayer()){//el orden
             hasRight=true;
             while(hasRight){
                 //if the stone to the left does not belong to player or if we are at the right edge of board, stop counting
-                if(xTemp==(size-1)||intersections[yTemp][xTemp+1].getPlayer()!=stone.getPlayer()){
+                //if(xTemp==(size-1)||intersections[yTemp][xTemp+1].getPlayer()!=stone.getPlayer()){
+                if(xTemp==(size-1)||intersections[yTemp][xTemp+1]==null||intersections[yTemp][xTemp+1].getPlayer()!=stone.getPlayer()){
                     hasRight=false;
                     break;
                 }
@@ -323,6 +353,7 @@ public class Board {
         }
         //if we found 5 stones placed horizontally
         if(horizontalCount>=length){
+            System.out.println("horizontal row found");
             return true;
         }
 
