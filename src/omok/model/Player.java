@@ -1,3 +1,4 @@
+//Andre Salamanca and Miguel Angel Garcia Jacquez
 package omok.model;
 /**
  * A player in an Omok game. It holds the name of the player and

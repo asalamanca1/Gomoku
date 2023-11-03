@@ -1,3 +1,4 @@
+//Andre Salamanca and Miguel Angel Garcia Jacquez
 package omok.model;
 import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;

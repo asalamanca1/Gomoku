@@ -1,3 +1,4 @@
+//Andre Salamanca and Miguel Angel Garcia Jacquez
 package omok.model;
 import omok.model.Player;
 import java.awt.*;
@@ -15,12 +16,16 @@ public class Board {
     Place[][] intersections;
     private int size;
     private List<Place> winningRow;
+    private Player p1;
+    private Player p2;
+    private Player currentPlayer;
 
     /** Create a new board of the default size. */
     public Board() {
         this.size=15;
         intersections = new Place[size][size];
         winningRow = new ArrayList<Place>();
+        currentPlayer=p1;
     }
     /** Create a new board of the specified size.
      * @param size The size of the board, indicating the number of intersections in both rows and columns.
@@ -29,6 +34,7 @@ public class Board {
         this.size=size;
         intersections = new Place[size][size];
         winningRow = new ArrayList<Place>();
+        currentPlayer=p1;
     }
     /**
      * Get the size of this board, which represents the number of intersections in both rows and columns.
@@ -83,6 +89,7 @@ public class Board {
         intersections[y-1][x-1].setPlayer(player);
         player.setX(x-1);
         player.setY(y-1);
+        System.out.println(intersections[y-1][x-1].getPlayer());
     }
 
     /**
@@ -239,7 +246,7 @@ public class Board {
         }
         //if we found 5 stones placed diagonally
         if(diagonalCount>=length){
-            //System.out.println("diagonal row found");
+            System.out.println("diagonal row found");
             return true;
         }
 
@@ -290,7 +297,7 @@ public class Board {
         }
         //if we found 5 stones placed diagonally
         if(diagonalCount>=length){
-            //System.out.println("diagonal row found");
+            System.out.println("diagonal row found");
             return true;
         }
 
@@ -339,7 +346,7 @@ public class Board {
         }
         //if we found 5 stones placed vertically
         if(verticalCount>=length){
-            //System.out.println("vertical row found");
+            System.out.println("vertical row found");
             return true;
         }
 
@@ -386,7 +393,7 @@ public class Board {
         }
         //if we found 5 stones placed horizontally
         if(horizontalCount>=length){
-            //System.out.println("horizontal row found");
+            System.out.println("horizontal row found");
             return true;
         }
 
@@ -447,6 +454,24 @@ public class Board {
         public Player getPlayer(){
             return this.player;
         }
+        public int getX(){
+            return this.x;
+        }
+        public int getY(){
+            return this.y;
+        }
+        /*
+        public Player currentPlayer(){
+            if(currentPlayer==p1){
+                currentPlayer=p2;
+            }
+            else{
+                currentPlayer=p1;
+            }
+            return currentPlayer();
+        }
+
+         */
 // other methods if needed ...
     }
 }
