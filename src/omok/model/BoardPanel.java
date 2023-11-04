@@ -106,14 +106,32 @@ public class BoardPanel extends JPanel{
         g.setColor(Color.WHITE);
         g.fillRect(75, j, 550, 20);
         g.fillRect(h, 65, 20, 550);
-
-
+/*
+        System.out.println(intersections.length);
         //draw all stones on board
         for(int i=0;i<intersections.length;i++){
-            for(int j=0;j<intersections[i].length;j++){
-                if(intersections[i][j]!=null){
+        System.out.println(113);
+            for(int k=0;k<intersections[i].length;k++){
+                System.out.println(115);
+                if(intersections[k][j]!=null){
+                    System.out.println(117);
+                    int x = xCoordinatesOnBoard.get(j+1);
+                    int y = yCoordinatesOnBoard.get(k+1);
+                    g.setColor(Color.BLACK);
+                    g.fillOval(x, y, 30, 30);
 
+                }
+            }
+        }
 
+ */
+        for(int i=1;i<16;i++){
+            for(int k=1;k<16;k++){
+                if(!board.isEmpty(i,k)){
+                    int x = xCoordinatesOnBoard.get(i);
+                    int y = yCoordinatesOnBoard.get(k);
+                    g.setColor(Color.BLACK);
+                    g.fillOval(x-15, y-15, 30, 30);
                 }
             }
         }

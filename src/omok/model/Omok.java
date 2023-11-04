@@ -111,7 +111,8 @@ public class Omok extends JFrame {
                     Graphics g = gameBoard.getGraphics();
 
                     g.setColor(Color.BLACK);
-                    g.fillOval(xCoordinatesRange.get(evt.getX())-15, yCoordinatesRange.get(evt.getY())-15, 30, 30); // Draw a small circle at (100, 100)
+                    gameBoard.paintComponent(g);
+                    //g.fillOval(xCoordinatesRange.get(evt.getX())-15, yCoordinatesRange.get(evt.getY())-15, 30, 30); // Draw a small circle at (100, 100)
                 }
 
 
