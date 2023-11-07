@@ -138,14 +138,7 @@ public class BoardPanel extends JPanel{
 
 
 
-        g.setColor(Color.RED);
-        g.drawOval(9,10,15,15);
-        g.fillOval(9,10,15,15);
-        g.setColor(Color.BLUE);
-        g.drawOval(145,180,15,15);
-        g.fillOval(145,180,15,15);
-        g.setColor(Color.MAGENTA);
-        g.drawString("Andre Salamanca", 60, 40);
+
         //repaint();
 
 

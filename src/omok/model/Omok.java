@@ -1,78 +1,132 @@
 package omok.model;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
 public class Omok extends JFrame {
-    private List<Integer> xCoordinates;
+    //DELETED: private List<Integer> xCoordinates;//
 
-    private List<Integer> yCoordinates;
-    private Map<Integer, Integer> xCoordinatesRange;
-    private Map<Integer, Integer> yCoordinatesRange;
-    Board omok;
+    //DELETED: private List<Integer> yCoordinates;//
+    //DELETED: private Map<Integer, Integer> xCoordinatesRange;//
+    //DELETED: private Map<Integer, Integer> yCoordinatesRange;//
+    //DELETED: Board omok;//
     private int mouseX;
     private int mouseY;
+    private  JButton restartGameButton;
+    private  JButton stopGameButton;
+    //DELETED: private BoardPanel gameBoard;//
+    private JPanel mainPanel;
+
+    private boolean boardVisible = false;
+
+    private boolean isPlayer1Turn = true;
+    //DELETED: private Player p1;//
 
     public Omok() {
         super("Omok");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //setPreferredSize(new Dimension(300, 200));
-        setPreferredSize(new Dimension(700, 700));
+        // sample UI
+        //var panel = new JPanel();
+        //panel.setLayout(new BorderLayout());
+        //DELETED: omok = new Board();//This line should be repainted
+        //var gameBoard = new BoardPanel(omok);
+        //DELETED: p1 = new Player("Mike");
 
+        GameStartScreen();
+
+    }
+    public void GameStartScreen() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setPreferredSize(new Dimension(300, 200));
         // sample UI
         var panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        omok = new Board();
-        var gameBoard = new BoardPanel(omok);
-        Player p1 = new Player("Mike");
-
-        panel.add(gameBoard, BorderLayout.CENTER);
-
-
-
-        //panel.add(new JLabel("Select Opponent:"));
-
         setContentPane(panel);
         pack();
         setVisible(true);
+        panel.add(new JLabel("Select opponent: "));
 
-        xCoordinates=gameBoard.getXcoordinates();
-        yCoordinates=gameBoard.getYcoordinates();
+        JRadioButton humanButton = new JRadioButton("Human");
+        JRadioButton computerButton = new JRadioButton("Computer");
 
-        xCoordinatesRange=gameBoard.getxCoordinatesRange();
-        yCoordinatesRange=gameBoard.getyCoordinatesRange();
-
-
-        var display = new JTextField(15);
-        display.setEditable(false);
-
-        AtomicReference<String> gameType= new AtomicReference<>("");
-        var humanButton = new JRadioButton("Human");
-        //add(humanButton);
-        var computerButton = new JRadioButton("Computer");
-        //add(computerButton);
-        var startGame = new JButton("Start game");
-        //add(startGame);
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(humanButton);
         buttonGroup.add(computerButton);
-        humanButton.addActionListener(E -> {
-            gameType.set("Human game selected!");
-        });
-        computerButton.addActionListener(E -> {
-            gameType.set("Computer game selected!");
-        });
-        startGame.addActionListener(E -> {
-            display.setText(gameType.get());
-        });
-        //panel.add(display);
 
-//IDEA: MAKE TWO DICTIONARIES, ONE FOR X AND ONE FOR Y, MAKE THE KEYS X/Y COORDINATES(1-15) AND FOR EACH KEY, HAVE THE BOARD PANELS CORRESPONDING COORDINATE
+        var playbutton = new JButton("play");
+        panel.add(humanButton);
+        panel.add(computerButton);
+        panel.add(playbutton);
+        playbutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (humanButton.isSelected()) {
+                    playbutton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            //Play button selected
+                            setPreferredSize(new Dimension(700, 700)); // Set the preferred size to 700x700 because it wasn't update it after calling the method
+                            revalidate(); // Refresh the frame
+                            pack(); // Show in the middle of the screen
+                            Game();
+                            showWindow();
+                            //dispose();
+                        }
+                    });
+
+                }
+                else if (computerButton.isSelected()) {
+                    //
+                } else {
+                    //
+                }
+            }
+        });
+    }
+    private void Game() {
+
+        mainPanel = new JPanel(new BorderLayout());
+        //mainPanel.setPreferredSize(new Dimension(700, 700));
+
+        //MAKE SETTERS FOR THESE VARIABLES, IN UI JUST CALL OMOK.SETXCOORDINATES, LEAVE BOARDPANEL AND BOARD LOGIC IN UI
+        //THESE NEXT FIVE LINES SHOULD BE IN UI, THEN JUST CALL OMOK.SETXCOORDS, ETC
+        gameBoard = new BoardPanel(omok);
+        xCoordinates = gameBoard.getXcoordinates();
+        yCoordinates = gameBoard.getYcoordinates();
+        xCoordinatesRange = gameBoard.getxCoordinatesRange();
+        yCoordinatesRange = gameBoard.getyCoordinatesRange();
+
+        restartGameButton = new JButton("Restart Game");
+        stopGameButton = new JButton("Stop Game");
+
+        var buttonPanel = new JPanel();
+        buttonPanel.add(restartGameButton);
+        buttonPanel.add(stopGameButton);
+
+        restartGameButton.addActionListener(e -> {
+            //CREATE A METHOD WITH THESE LINES IN UI, UI SHOULD ALREADY HAVE BOARDPANEL AND BOARD LOGIC IMPLEMENTED
+            omok.clear();
+            gameBoard.repaint();
+            isPlayer1Turn = true;
+        });
+
+        stopGameButton.addActionListener(e -> {
+            GameStartScreen();
+        });
+        //This works to disappear the board and return it empty
+        /*stopGameButton.addActionListener(e -> {
+            boardVisible = !boardVisible;
+            gameBoard.setVisible(boardVisible);
+            gameBoard.revalidate();
+            pack();
+        });
+        */
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        mainPanel.add(gameBoard, BorderLayout.CENTER);
+
+        setContentPane(mainPanel);
         gameBoard.addMouseListener(new java.awt.event.MouseAdapter(){
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 /*
@@ -125,47 +179,16 @@ public class Omok extends JFrame {
                 }
             }
         });
-        /*
-        gameBoard.addMouseMotionListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-
-                xCoordinates=gameBoard.getXcoordinates();
-                yCoordinates=gameBoard.getYcoordinates();
-                System.out.println(evt.getX());
-
-
-                if (xCoordinates.contains(evt.getX()) && yCoordinates.contains(evt.getY())) {
-                    System.out.println(xCoordinates);
-                    System.out.println(yCoordinates);
-                    Graphics g = gameBoard.getGraphics();
-                    g.setColor(Color.BLACK);
-                    g.fillOval(evt.getX(), evt.getY(), 100, 100); // Draw a small circle at (100, 100)
-                }
-                else{
-                    Graphics g = gameBoard.getGraphics();
-                    //gameBoard.paintComponent(g);
-                }
-
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (evt.getX() == 75 && evt.getY() == 65) {
-                    Graphics g = gameBoard.getGraphics();
-                    g.setColor(gameBoard.getBackground());
-                    g.fillOval(95, 95, 10, 10); // Erase the circle at (100, 100)
-                }
-            }
-        });
-*/
-
-
-
-
-
-
-
 
     }
+
+    public void showWindow() {
+        setLocationRelativeTo(null);
+        pack();
+        setVisible(true);
+    }
+
+
     public Board getBoard(){
         return omok;
     }
@@ -180,4 +203,3 @@ public class Omok extends JFrame {
         javax.swing.SwingUtilities.invokeLater(() -> new Omok());
     }
 }
-
