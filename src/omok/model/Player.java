@@ -1,5 +1,8 @@
 //Andre Salamanca and Miguel Angel Garcia Jacquez
 package omok.model;
+
+import java.util.Random;
+
 /**
  * A player in an Omok game. It holds the name of the player and
  * can be used to identify a specific player throughout the game.
@@ -31,5 +34,33 @@ public class Player {
     public int getY(){
         return this.y;
     }
+    public boolean isHuman(){
+        return isHuman;
+    }
+    public void setComputerOpponent(){
+        this.isHuman=false;
+    }
+    public void automateMove(Board omok){
+        if(!isHuman){
+            omok.model.Board.Place[][]intersections=omok.getIntersections();;
+            Random random = new Random();
+            int randX=1;
+            System.out.println(randX+" XY "+y);
+            while(!omok.isEmpty(randX,y+1)){
+                randX = random.nextInt(15);
+                System.out.println(randX+" XY "+y);
+            }
+
+            omok.placeStone(randX,y+1,this);
+            omok.switchTurns();
+        }
+
+
+    }
+
+
+
+
+
 
 }

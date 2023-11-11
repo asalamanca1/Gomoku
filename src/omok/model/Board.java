@@ -13,8 +13,13 @@ import java.util.ArrayList;
  * top-right intersection is represented by the indices (n, n).
  */
 public class Board {
+    // 2D array to represent the intersections on the board
     Place[][] intersections;
+
+    // The size of the board
     private int size;
+
+    // List to store the winning row of places
     private List<Place> winningRow;
     private Player p1;
     private Player p2;
@@ -22,18 +27,32 @@ public class Board {
 
     /** Create a new board of the default size. */
     public Board() {
+        // The size of the board. By default, it's set to 15.
         this.size=15;
+
+        // A 2D array representing the intersections on the board.
         intersections = new Place[size][size];
+
+        // A list of winning places that form a winning row.
         winningRow = new ArrayList<Place>();
+        p1=new Player("Mike", true);
+        p2=new Player("Andre", true);
         currentPlayer=p1;
     }
     /** Create a new board of the specified size.
      * @param size The size of the board, indicating the number of intersections in both rows and columns.
      */
     public Board(int size) {
+        // Initialize the size attribute with the provided size.
         this.size=size;
+
+        // Initialize the intersections as a 2D array with the specified size.
         intersections = new Place[size][size];
+
+        // Initialize the winningRow as an empty ArrayList.
         winningRow = new ArrayList<Place>();
+        p1=new Player("Mike", true);
+        p2=new Player("Andre", true);
         currentPlayer=p1;
     }
     /**
@@ -65,13 +84,16 @@ public class Board {
      *  @return true if all places on the board are occupied, false otherwise.
      */
     public boolean isFull() {
+        // Loop through all intersections on the board
         for(int i=0;i< size;i++){
             for(int j=0;j< size;j++){
+                // If any intersection is empty, return false
                 if(intersections[i][j]==null){
                     return false;
                 }
             }
         }
+        // If no empty intersections were found, the board is full.
         return true;
     }
 
@@ -84,9 +106,13 @@ public class Board {
      * @param player Player whose stone is to be placed
      */
     public void placeStone(int x, int y, Player player) {
+        // Create a new Place object for the stone at the specified coordinates
         Place stone = new Place(x,y);
+        // Set the intersection at (x, y) to the new stone
         intersections[y-1][x-1]=stone;
+        // Set the player for the new stone
         intersections[y-1][x-1].setPlayer(player);
+        // Update the player's coordinates to the new position
         player.setX(x-1);
         player.setY(y-1);
         System.out.println(intersections[y-1][x-1].getPlayer());
@@ -101,9 +127,11 @@ public class Board {
      * @return true if the specified intersection is empty, false if it is occupied.
      */
     public boolean isEmpty(int x, int y) {
+        // Check if the intersection at (x, y) is null (empty)
         if(intersections[y-1][x-1]==null){
             return true;
         }
+        // The intersection is occupied
         return false;
     }
 
@@ -112,12 +140,14 @@ public class Board {
      *
      * @param x 0-based column (vertical) index
      * @param y 0-based row (horizontal) index
-     * @return true if the specified intersection is empty, false if it is occupied.
+     * @return true if the specified intersection is occupied, false if it is empty.
      */
     public boolean isOccupied(int x, int y) {
+        // Check if the intersection at (x, y) is null (empty)
         if(intersections[y-1][x-1]==null){
             return false;
         }
+        // Check if the intersection is occupied by a player's stone
         if(intersections[y-1][x-1].getPlayer()!=null){
             return true;
         }
@@ -134,9 +164,11 @@ public class Board {
      * @return true if the specified intersection is empty, false if it is occupied.
      */
     public boolean isOccupiedBy(int x, int y, Player player) {
+        // Check if the intersection x and y is empty
         if(intersections[y-1][x-1]==null){
             return false;
         }
+        // Check if the intersection is occupied by the specified player's stone
         if(intersections[y-1][x-1].getPlayer()==player){
             return true;
         }
@@ -151,9 +183,12 @@ public class Board {
      * @return The Player who occupies the specified intersection, or null if the intersection is empty.
      */
     public Player playerAt(int x, int y) {
+        // Check if the intersection at (x, y) is empty
+
         if(intersections[y-1][x-1]==null){
             return null;
         }
+        // Return the player who occupies that intersection
         return intersections[y-1][x-1].getPlayer();
     }
     /**
@@ -207,7 +242,7 @@ public class Board {
         xTemp=player.getX();
         yTemp=player.getY();
         //stone has diagonal row up/left and is not at the top left of board, start counting
-        if((y!=(size-1)&&x!=0) && intersections[y+1][x-1]!=null&&intersections[y+1][x-1].getPlayer()==stone.getPlayer()){
+        if((y!=(size-1)&&x!=0) && intersections[y+1][x-1]!=null&&  stone!=null &&intersections[y+1][x-1].getPlayer()==stone.getPlayer()){
             hasUpLeft=true;
             while(hasUpLeft){
                 //if the stone to the up/left does not belong to player or if we are at the top left edge of board, stop counting
@@ -228,7 +263,7 @@ public class Board {
         yTemp=player.getY();
         //if we are not at bottom right edge of board and the bottom/right neigboring stone belongs to player, start counting
         //if((y!=0&&x!=(size-1)) && intersections[y-1][x+1].getPlayer()==stone.getPlayer()){
-        if((y!=0&&x!=(size-1)) && intersections[y-1][x+1]!=null && intersections[y-1][x+1].getPlayer()==stone.getPlayer()){
+        if((y!=0&&x!=(size-1)) && intersections[y-1][x+1]!=null && stone!=null &&intersections[y-1][x+1].getPlayer()==stone.getPlayer()){
             hasDownRight=true;
             while(hasDownRight){
                 //if the stone to the down/right does not belong to player or if we are at the bottom right edge of board, stop counting
@@ -257,28 +292,30 @@ public class Board {
         yTemp=player.getY();
         diagonalCount=1;
         //if we are not at the top right edge of board and the neighboring top/right stone belongs to player, start counting
-        if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1]!=null && intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
-            //if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
-            hasUpRight=true;
-            while(hasUpRight){
-                //if the stone to the top/right does not belong to player or if we are at the top right edge of board, stop counting
-                if((yTemp==(size-1)||xTemp==(size-1))||intersections[yTemp+1][xTemp+1]==null||intersections[yTemp+1][xTemp+1].getPlayer()!=stone.getPlayer()){
-                    //if((yTemp==(size-1)&&xTemp==(size-1))||intersections[yTemp+1][xTemp+1].getPlayer()!=stone.getPlayer()){
-                    hasUpRight=false;
-                    winningRow.add(intersections[yTemp][xTemp]);//
-                    break;
+        //if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1]!=null && intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
+        if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1]!=null && stone!=null&&intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
+                //if((y!=(size-1)&&x!=(size-1)) && intersections[y+1][x+1].getPlayer()==stone.getPlayer()){
+                hasUpRight=true;
+                while(hasUpRight){
+                    //if the stone to the top/right does not belong to player or if we are at the top right edge of board, stop counting
+                    if((yTemp==(size-1)||xTemp==(size-1))||intersections[yTemp+1][xTemp+1]==null||intersections[yTemp+1][xTemp+1].getPlayer()!=stone.getPlayer()){
+                        //if((yTemp==(size-1)&&xTemp==(size-1))||intersections[yTemp+1][xTemp+1].getPlayer()!=stone.getPlayer()){
+                        hasUpRight=false;
+                        winningRow.add(intersections[yTemp][xTemp]);//
+                        break;
+                    }
+                    winningRow.add(intersections[yTemp][xTemp]);
+                    yTemp+=1;
+                    xTemp+=1;
+                    diagonalCount+=1;
                 }
-                winningRow.add(intersections[yTemp][xTemp]);
-                yTemp+=1;
-                xTemp+=1;
-                diagonalCount+=1;
-            }
+
         }
         //has diagonal row down/left
         xTemp=player.getX();
         yTemp=player.getY();
         //if we are not at the bottom left edge of board and bottom/left neighboring stone belongs to player, start counting
-        if((y!=0&&x!=0) && intersections[y-1][x-1]!=null &&intersections[y-1][x-1].getPlayer()==stone.getPlayer()){
+        if((y!=0&&x!=0) && intersections[y-1][x-1]!=null && stone!=null &&intersections[y-1][x-1].getPlayer()==stone.getPlayer()){
             //if((y!=0&&x!=0) && intersections[y-1][x-1].getPlayer()==stone.getPlayer()){
             hasDownLeft=true;
             while(hasDownLeft){
@@ -308,7 +345,8 @@ public class Board {
         yTemp=player.getY();
         //if we are not at the top edge of board and the neighboring top stone belongs to player, start counting
         //if(y!=(size-1) && intersections[y+1][x].getPlayer()==stone.getPlayer()){
-        if(y!=(size-1) && intersections[y+1][x]!=null&&intersections[y+1][x].getPlayer()==player){
+        //if(y!=(size-1) && intersections[y+1][x]!=null&&intersections[y+1][x].getPlayer()==player){
+        if(y!=(size-1) && intersections[y+1][x]!=null && stone!=null && intersections[y+1][x].getPlayer()==stone.getPlayer()){
             hasUp=true;
             while(hasUp){
                 //if we are at the top of the board or if the top neighboring stone doesnt belong to player, stop counting
@@ -329,7 +367,7 @@ public class Board {
         yTemp=player.getY();
         //if we are not at the bottom edge of board and the neighboring bottome stone belongs to player, start counting
         //if(y!=0 && intersections[y-1][x].getPlayer()==stone.getPlayer()){
-        if(y!=0 && intersections[y-1][x]!=null&&intersections[y-1][x].getPlayer()==stone.getPlayer()){
+        if(y!=0 && intersections[y-1][x]!=null&& stone!=null &&intersections[y-1][x].getPlayer()==stone.getPlayer()){
             hasDown=true;
             while(hasDown){
                 //if the stone to the left does not belong to player or if we are at the right edge of board, stop counting
@@ -357,7 +395,7 @@ public class Board {
         yTemp=player.getY();
         //if the intersection to left of the stone belongs to player and stone is not on the left edge of board, start counting
         //if(x!=0 && intersections[y][x-1].getPlayer()==stone.getPlayer()){//
-        if(x!=0 && intersections[y][x-1]!=null&&intersections[y][x-1].getPlayer()==stone.getPlayer()){
+        if(x!=0 && intersections[y][x-1]!=null&& stone!=null &&intersections[y][x-1].getPlayer()==stone.getPlayer()){
             hasLeft=true;
             while(hasLeft){
                 //if the stone to the left does not belong to player or if we are at the left edge of board, stop counting
@@ -376,7 +414,7 @@ public class Board {
         xTemp=player.getX();
         yTemp=player.getY();
         //if(x!=(size-1) && intersections[y][x+1].getPlayer()==stone.getPlayer()){//el orden
-        if(x!=(size-1) && intersections[y][x+1]!=null&&intersections[y][x+1].getPlayer()==stone.getPlayer()){//el orden
+        if(x!=(size-1) && intersections[y][x+1]!=null&& stone!=null &&intersections[y][x+1].getPlayer()==stone.getPlayer()){//el orden
             hasRight=true;
             while(hasRight){
                 //if the stone to the left does not belong to player or if we are at the right edge of board, stop counting
@@ -409,6 +447,7 @@ public class Board {
      * @return A list of places representing the winning row, or an empty list if no winning row exists.
      */
     public List<Place> winningRow() {
+        // Return the list of places representing the winning row
         return winningRow;
     }
     /**
@@ -418,7 +457,26 @@ public class Board {
      * @return The 2D array of Place objects representing the intersections on the board.
      */
     public Place[][] getIntersections(){
+        // Return the 2D array of Place objects representing the intersections on the board
         return intersections;
+    }
+    public Player getCurrentPlayer(){
+        return currentPlayer;
+    }
+    public void setCurrentPlayer(Player player){
+        currentPlayer=player;
+    }
+    public void switchTurns(){
+        if(p1==currentPlayer){
+            currentPlayer=p2;
+        }
+        else {
+            currentPlayer = p1;
+        }
+    }
+    public Player[] getPlayers(){
+        Player[] players = new Player[]{p1, p2, currentPlayer};
+        return players;
     }
     /**
      * An intersection on an Omok board identified by its 0-based column
@@ -442,16 +500,32 @@ public class Board {
          * @param y 0-based row (horizontal) index
          */
         public Place(int x, int y) {
+            // Set the x and y indices to represent the location of this place
             this.x = x;
             this.y = y;
+            // Initialize the player and stone properties to null and "-"
             this.player=null;
             this.stone="-";
         }
+        /**
+         * Set the player who occupies this place and mark it with a stone.
+         *
+         * @param player The player to be set as the occupant of this place.
+         */
         public void setPlayer(Player player){
+            // Set the player occupying this place
             this.player=player;
+            // Mark this place with a stone to indicate the player's presence
             this.stone="*";
         }
+        /**
+         * Get the player who occupies this place.
+         *
+         * @return The player who occupies this place, or null if the place is empty.
+         */
         public Player getPlayer(){
+
+            // Return the player who occupies this place, or null if it's empty
             return this.player;
         }
         public int getX(){

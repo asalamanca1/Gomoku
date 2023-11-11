@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
+//PROBLEMS:
+//whenever i win a game, then stop it, game always restarts with player 2 as first player
+//add draw game, if board is full, end game
 
 public class BoardPanel extends JPanel{
     private Board board;
@@ -33,6 +35,13 @@ public class BoardPanel extends JPanel{
 
 
     protected omok.model.Board.Place[][]intersections;
+    private Player currentPlayer;
+    private Player p1;
+    private Player p2;
+    private boolean gameOver;
+    private int numMoves;
+    private List<omok.model.Board.Place> winningRow;
+
 
 
 
@@ -51,12 +60,18 @@ public class BoardPanel extends JPanel{
         xCoordinatesOnBoard=new HashMap<>();
         yCoordinatesOnBoard=new HashMap<>();
         intersections=board.getIntersections();
+        p1=board.getPlayers()[0];
+        p2=board.getPlayers()[1];
+        currentPlayer=board.getPlayers()[2];
+        gameOver=false;
+
+
 
 
     }
     protected void paintComponent(Graphics g) {
 
-
+        numMoves=0;
         intersections=board.getIntersections();
         int j=1;
         Dimension d = getSize();
@@ -67,13 +82,15 @@ public class BoardPanel extends JPanel{
         g.fillRect(75, 65, 550, 550);
 
         g.setColor(Color.BLACK);
+        g.drawRect(75, 65, 550, 550);
 
         //draw vertical lines
-        for(int i=0;i<=size;i++){
-            j = i*(550/size)+75;
-            xCoordinatesOnPanel.put(j,i+1);
+        for(int i=1;i<=(size+1);i++){
+            j = i*(550/(size+1))+75;
 
-            xCoordinatesOnBoard.put(i+1,j);
+            xCoordinatesOnPanel.put(j,i);
+
+            xCoordinatesOnBoard.put(i,j);
 
             g.drawLine(j,65,j,615);
             for(int k=(j-10);k<=(j+10);k++){
@@ -86,10 +103,11 @@ public class BoardPanel extends JPanel{
         int h=j;
 
         //draw horizontal lines
-        for(int i=0;i<=size;i++){
-            j = i*(550/size)+65;
-            yCoordinatesOnPanel.put(j,i+1);
-            yCoordinatesOnBoard.put(i+1,j);
+        for(int i=1;i<=(size+1);i++){
+            j = i*(550/(size+1))+65;
+
+            yCoordinatesOnPanel.put(j,i);
+            yCoordinatesOnBoard.put(i,j);
             g.drawLine(75,j,625,j);
             for(int k=(j-10);k<=(j+10);k++){
                 yCoordinatesRange.put(k,j);
@@ -127,14 +145,115 @@ public class BoardPanel extends JPanel{
  */
         for(int i=1;i<16;i++){
             for(int k=1;k<16;k++){
-                if(!board.isEmpty(i,k)){
+                if(!board.isEmpty(i,k)&&board.isOccupied(i,k)){
                     int x = xCoordinatesOnBoard.get(i);
                     int y = yCoordinatesOnBoard.get(k);
-                    g.setColor(Color.BLACK);
-                    g.fillOval(x-15, y-15, 30, 30);
+                    p1=board.getPlayers()[0];
+                    p2=board.getPlayers()[1];
+                    currentPlayer=board.getCurrentPlayer();
+
+
+                    if(intersections[k-1][i-1].getPlayer()==p1){
+
+
+                        g.setColor(Color.BLACK);
+                        g.fillOval(x-15, y-15, 30, 30);
+                        g.setColor(Color.WHITE);
+                        g.drawOval(x-15, y-15, 30, 30);
+                        numMoves+=1;
+
+
+                    }
+                    else if(intersections[k-1][i-1].getPlayer()==p2){
+
+
+
+                        g.setColor(Color.WHITE);
+                        g.fillOval(x-15, y-15, 30, 30);
+                        g.setColor(Color.BLACK);
+                        g.drawOval(x-15, y-15, 30, 30);
+                        numMoves+=1;
+
+                    }
+
+
                 }
             }
         }
+        p1=board.getPlayers()[0];
+        p2=board.getPlayers()[1];
+        currentPlayer=board.getCurrentPlayer();
+
+
+        if(numMoves>2){
+            if(board.isWonBy(p1)||board.isWonBy(p2)){
+                gameOver=true;
+                winningRow=board.winningRow();
+                System.out.println("WINNING ROW"+board.winningRow());
+
+                //highlight winning row
+                for(int i =0;i<winningRow.size();i++){
+                    int x = xCoordinatesOnBoard.get(winningRow.get(i).getX());
+                    int y = yCoordinatesOnBoard.get(winningRow.get(i).getY());
+                    g.setColor(Color.RED);
+                    g.fillOval(x-15, y-15, 30, 30);
+
+                }
+
+
+            }
+
+        }
+
+
+
+        //if game isnt over, print current players turn
+        if(!gameOver){
+            if(currentPlayer==p1){
+                g.setColor(Color.WHITE);
+                g.drawRect(50,50,200,13);
+                g.fillRect(50,50,200,13);
+                g.setColor(Color.BLACK);
+                g.drawString("Player 1's Turn:",50,50);
+            }
+            else if(currentPlayer==p2){
+                g.setColor(Color.WHITE);
+                g.drawRect(50,50,200,13);
+                g.fillRect(50,50,200,13);
+                g.setColor(Color.BLACK);
+                g.drawString("Player 2's Turn:",50,50);
+            }
+        }
+        //if game is over, print the winners name on screen
+        else if(gameOver){
+            //erase current players turn
+            g.setColor(Color.WHITE);
+            g.drawRect(50,50,200,13);
+            g.fillRect(50,50,200,13);
+            g.setColor(Color.BLACK);
+            if(p2==currentPlayer){
+                System.out.println("PLAYER 1 HAS WON GAME");
+                g.drawString("PLAYER 1 HAS WON GAME",50,50);
+                g.drawString("GAME OVER",550,50);
+            }
+            else {
+                g.drawString("PLAYER 2 HAS WON GAME",50,50);
+                g.drawString("GAME OVER",550,50);
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -164,8 +283,9 @@ public class BoardPanel extends JPanel{
         return yCoordinatesOnPanel;
     }
 
-    public static void main(String[] args) {
-        //Board omok = new Board();
-        //SwingUtilities.invokeLater(() -> new BoardPanel(omok));
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
+
+
 }
