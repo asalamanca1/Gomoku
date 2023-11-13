@@ -1,3 +1,4 @@
+//Andre Salamanca and Miguel Angel Garcia Jacquez
 package omok.model;
 import javax.swing.*;
 import java.awt.*;
@@ -6,9 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-//PROBLEMS:
-//whenever i win a game, then stop it, game always restarts with player 2 as first player
-//add draw game, if board is full, end game
+
 
 public class BoardPanel extends JPanel{
     private Board board;
@@ -41,6 +40,7 @@ public class BoardPanel extends JPanel{
     private boolean gameOver;
     private int numMoves;
     private List<omok.model.Board.Place> winningRow;
+    private boolean isFull;
 
 
 
@@ -77,10 +77,12 @@ public class BoardPanel extends JPanel{
         Dimension d = getSize();
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, d.width, d.height);
-        g.setColor(Color.YELLOW);
 
+        //draw yellow background
+        g.setColor(Color.YELLOW);
         g.fillRect(75, 65, 550, 550);
 
+        //draw black border
         g.setColor(Color.BLACK);
         g.drawRect(75, 65, 550, 550);
 
@@ -88,16 +90,19 @@ public class BoardPanel extends JPanel{
         for(int i=1;i<=(size+1);i++){
             j = i*(550/(size+1))+75;
 
+            //store x coordinates on panel to corressponding intersection coordinate
             xCoordinatesOnPanel.put(j,i);
-
+            //store x coordinates on board to corressponding panel coordinates
             xCoordinatesOnBoard.put(i,j);
 
             g.drawLine(j,65,j,615);
+
+            //create a range of 20 for this coordinate and store it in a dictionary and list
             for(int k=(j-10);k<=(j+10);k++){
                 xCoordinatesRange.put(k,j);
                 xCoordinates.add(k);
             }
-            //xCoordinates.add(i,j);
+
 
         }
         int h=j;
@@ -105,46 +110,34 @@ public class BoardPanel extends JPanel{
         //draw horizontal lines
         for(int i=1;i<=(size+1);i++){
             j = i*(550/(size+1))+65;
-
+            //store y coordinates on panel to corressponding intersection coordinate
             yCoordinatesOnPanel.put(j,i);
+            //store y coordinates on board to corressponding panel coordinates
             yCoordinatesOnBoard.put(i,j);
             g.drawLine(75,j,625,j);
+
+            //create a range of 20 for this coordinate and store it in a dictionary and list
             for(int k=(j-10);k<=(j+10);k++){
                 yCoordinatesRange.put(k,j);
                 yCoordinates.add(k);
             }
-            //yCoordinates.add(i,j);
+
 
         }
+        //reverse list because it was made backwards(from top to bottom)
         Collections.reverse(yCoordinates);
 
 
         //fill in the offset lines with white
-
         g.setColor(Color.WHITE);
         g.fillRect(75, j, 550, 20);
         g.fillRect(h, 65, 20, 550);
-/*
-        System.out.println(intersections.length);
-        //draw all stones on board
-        for(int i=0;i<intersections.length;i++){
-        System.out.println(113);
-            for(int k=0;k<intersections[i].length;k++){
-                System.out.println(115);
-                if(intersections[k][j]!=null){
-                    System.out.println(117);
-                    int x = xCoordinatesOnBoard.get(j+1);
-                    int y = yCoordinatesOnBoard.get(k+1);
-                    g.setColor(Color.BLACK);
-                    g.fillOval(x, y, 30, 30);
 
-                }
-            }
-        }
 
- */
+        //draw stones
         for(int i=1;i<16;i++){
             for(int k=1;k<16;k++){
+                //if a stone exists
                 if(!board.isEmpty(i,k)&&board.isOccupied(i,k)){
                     int x = xCoordinatesOnBoard.get(i);
                     int y = yCoordinatesOnBoard.get(k);
@@ -152,10 +145,10 @@ public class BoardPanel extends JPanel{
                     p2=board.getPlayers()[1];
                     currentPlayer=board.getCurrentPlayer();
 
-
+                    //if stone belongs to player 1
                     if(intersections[k-1][i-1].getPlayer()==p1){
 
-
+                        //draw black stone
                         g.setColor(Color.BLACK);
                         g.fillOval(x-15, y-15, 30, 30);
                         g.setColor(Color.WHITE);
@@ -164,10 +157,11 @@ public class BoardPanel extends JPanel{
 
 
                     }
+                    //if stone belongs to player 2
                     else if(intersections[k-1][i-1].getPlayer()==p2){
 
 
-
+                        //draw white stone
                         g.setColor(Color.WHITE);
                         g.fillOval(x-15, y-15, 30, 30);
                         g.setColor(Color.BLACK);
@@ -184,8 +178,9 @@ public class BoardPanel extends JPanel{
         p2=board.getPlayers()[1];
         currentPlayer=board.getCurrentPlayer();
 
-
+        //if each player has made at least one move, we can start checking for a won game
         if(numMoves>2){
+            //if game is won
             if(board.isWonBy(p1)||board.isWonBy(p2)){
                 gameOver=true;
                 winningRow=board.winningRow();
@@ -195,6 +190,7 @@ public class BoardPanel extends JPanel{
                 for(int i =0;i<winningRow.size();i++){
                     int x = xCoordinatesOnBoard.get(winningRow.get(i).getX());
                     int y = yCoordinatesOnBoard.get(winningRow.get(i).getY());
+                    //draw winning row as red stones
                     g.setColor(Color.RED);
                     g.fillOval(x-15, y-15, 30, 30);
 
@@ -204,11 +200,18 @@ public class BoardPanel extends JPanel{
             }
 
         }
+        //if the board is full
+        if(board.isFull()){
+            isFull=true;
+            gameOver=true;
+        }
+        else{
+            isFull=false;
+        }
 
-
-
-        //if game isnt over, print current players turn
-        if(!gameOver){
+        //if game isnt over and board isnt full, print current players turn
+        if(!gameOver&&!isFull){
+            //draw Player 1s turn
             if(currentPlayer==p1){
                 g.setColor(Color.WHITE);
                 g.drawRect(50,50,200,13);
@@ -216,7 +219,8 @@ public class BoardPanel extends JPanel{
                 g.setColor(Color.BLACK);
                 g.drawString("Player 1's Turn:",50,50);
             }
-            else if(currentPlayer==p2){
+            //draw player 2s turn
+            else if(currentPlayer==p2&&!isFull){
                 g.setColor(Color.WHITE);
                 g.drawRect(50,50,200,13);
                 g.fillRect(50,50,200,13);
@@ -224,41 +228,32 @@ public class BoardPanel extends JPanel{
                 g.drawString("Player 2's Turn:",50,50);
             }
         }
-        //if game is over, print the winners name on screen
-        else if(gameOver){
+        //if game is over and board isnt full, print the winners name on screen
+        else if(gameOver&&!isFull){
             //erase current players turn
             g.setColor(Color.WHITE);
             g.drawRect(50,50,200,13);
             g.fillRect(50,50,200,13);
             g.setColor(Color.BLACK);
             if(p2==currentPlayer){
-                System.out.println("PLAYER 1 HAS WON GAME");
-                g.drawString("PLAYER 1 HAS WON GAME",50,50);
+
+                g.drawString("PLAYER 2 HAS WON GAME",50,50);
                 g.drawString("GAME OVER",550,50);
             }
             else {
-                g.drawString("PLAYER 2 HAS WON GAME",50,50);
+                g.drawString("PLAYER 1 HAS WON GAME",50,50);
                 g.drawString("GAME OVER",550,50);
             }
 
 
 
         }
+        //if game is over and board is full, print draw game on screen
+        else if(gameOver&&isFull){
+            g.drawString("GAME HAS RESULTED IN A DRAW",50,50);
+            g.drawString("GAME OVER",550,50);
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //repaint();
 
 
     }
@@ -289,3 +284,22 @@ public class BoardPanel extends JPanel{
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
