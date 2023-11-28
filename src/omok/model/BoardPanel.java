@@ -90,16 +90,18 @@ public class BoardPanel extends JPanel{
         for(int i=1;i<=(size+1);i++){
             j = i*(550/(size+1))+75;
 
-            //store x coordinates on panel to corressponding intersection coordinate
+            //store x coordinates on panel to corressponding intersection coordinate, key: panel coordinate -> x/y coordinate(1-15)
             xCoordinatesOnPanel.put(j,i);
-            //store x coordinates on board to corressponding panel coordinates
+            //store x coordinates on board to corressponding panel coordinates, key: x/y coordinate(1-15) -> panel coordinate
             xCoordinatesOnBoard.put(i,j);
 
             g.drawLine(j,65,j,615);
 
             //create a range of 20 for this coordinate and store it in a dictionary and list
             for(int k=(j-10);k<=(j+10);k++){
+                //assign all coordinates within a range of 20 as a key, the key yields the correct coordinate
                 xCoordinatesRange.put(k,j);
+                //add range of 20 for this coordinate to list
                 xCoordinates.add(k);
             }
 
@@ -110,15 +112,17 @@ public class BoardPanel extends JPanel{
         //draw horizontal lines
         for(int i=1;i<=(size+1);i++){
             j = i*(550/(size+1))+65;
-            //store y coordinates on panel to corressponding intersection coordinate
+            //store y coordinates on panel to corressponding intersection coordinate, key: panel coordinate -> x/y coordinate(1-15)
             yCoordinatesOnPanel.put(j,i);
-            //store y coordinates on board to corressponding panel coordinates
+            //store y coordinates on board to corressponding panel coordinates, key: x/y coordinate(1-15) -> panel coordinate
             yCoordinatesOnBoard.put(i,j);
             g.drawLine(75,j,625,j);
 
             //create a range of 20 for this coordinate and store it in a dictionary and list
             for(int k=(j-10);k<=(j+10);k++){
+                //assign all coordinates within a range of 20 as a key, the key yields the correct coordinate
                 yCoordinatesRange.put(k,j);
+                //add range of 20 for this coordinate to list
                 yCoordinates.add(k);
             }
 

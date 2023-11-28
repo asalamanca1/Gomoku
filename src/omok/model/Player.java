@@ -78,22 +78,26 @@ public class Player {
     }
     public void automateMove(Board omok){
         int count=1;
+        //if player is not human
         if(!isHuman){
+            //get array of intersections
             omok.model.Board.Place[][]intersections=omok.getIntersections();;
             Random random = new Random();
             int randX=1;
             System.out.println(randX+" XY "+y);
+            //while current intersection isnt empty and is occupied
             while(!omok.isEmpty(randX,y+1)&&omok.isOccupied(randX,y+1)){
                 count++;
                 if(count==13){
                     y+=1;
                     count=1;
                 }
+                //generate a random x
                 randX = random.nextInt(1,15);
 
                 System.out.println(randX+" XY "+y);
             }
-
+            //place stone at this random location
             omok.placeStone(randX,y+1,this);
 
         }
