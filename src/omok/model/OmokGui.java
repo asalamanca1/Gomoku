@@ -31,6 +31,7 @@ public class OmokGui extends JFrame {
     private JRadioButton computerButton;
     private JButton playbutton;
     private JRadioButton humanButton;
+    private JRadioButton p2pButton;
     private ButtonGroup buttonGroup;
     private boolean gameIsRunning;
 
@@ -46,6 +47,7 @@ public class OmokGui extends JFrame {
         validMove=false;
         humanButton = new JRadioButton("Human");
         computerButton = new JRadioButton("Computer");
+        p2pButton = new JRadioButton("P2P");
         buttonGroup = new ButtonGroup();
         playbutton = new JButton("play");
         gameBoard = new BoardPanel(omok);
@@ -76,12 +78,14 @@ public class OmokGui extends JFrame {
 
         buttonGroup.add(humanButton);
         buttonGroup.add(computerButton);
+        buttonGroup.add(p2pButton);
 
 
 
         panel.add(humanButton);
         panel.add(computerButton);
         panel.add(playbutton);
+        panel.add(p2pButton);
         addGameBoardActionListener(gameBoard);
         //play button action listener
         playbutton.addActionListener(new ActionListener() {
@@ -92,7 +96,6 @@ public class OmokGui extends JFrame {
                     isHuman=true;
                     p1.setIsHuman(true);
                     p2.setIsHuman(true);
-
                     addPlayButtonActionListener();
 
                 }
@@ -103,6 +106,12 @@ public class OmokGui extends JFrame {
                     p2.setIsHuman(false);
                     addPlayButtonActionListener();
 
+                }
+                else if(p2pButton.isSelected()){
+                    isHuman=true;
+                    p1.setIsHuman(true);
+                    p2.setIsHuman(true);
+                    addPlayButtonActionListener();
                 }
             }
         });
