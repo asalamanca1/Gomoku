@@ -14,12 +14,22 @@ public class Player {
     private final String name;
 
     private boolean isHuman;
+    private boolean isOnNetwork;
+    private boolean winner;
     /** Create a new player with the given name.
      * @param name The name of the player.
      */
     public Player(String name, boolean isHuman) {
         this.name = name;
         this.isHuman = isHuman;
+        this.isOnNetwork=false;
+        winner=false;
+    }
+    public Player(String name, boolean isHuman, boolean isOnNetwork) {
+        this.name = name;
+        this.isHuman = isHuman;
+        this.isOnNetwork=isOnNetwork;
+        winner=false;
     }
     /** Return the name of this player.
      * @return The name of this player.
@@ -61,6 +71,10 @@ public class Player {
     public int getX() {
         return this.x;
     }
+    public void setWinner(boolean winner){
+        this.winner=winner;
+    }
+    public boolean isWinner(){return this.winner;}
 
     /**
      * Get the Y-coordinate of this place.
@@ -76,6 +90,8 @@ public class Player {
     public void setIsHuman(boolean isHuman){
         this.isHuman=isHuman;
     }
+    public void setIsOnNetwork(boolean isOnNetwork){this.isOnNetwork=isOnNetwork;}
+    public boolean isOnNetwork(){return this.isOnNetwork;}
     public void automateMove(Board omok){
         int count=1;
         //if player is not human

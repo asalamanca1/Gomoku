@@ -115,7 +115,7 @@ public class Board {
         // Update the player's coordinates to the new position
         player.setX(x-1);
         player.setY(y-1);
-        System.out.println(intersections[y-1][x-1].getPlayer());
+        //System.out.println(intersections[y-1][x-1].getPlayer());
     }
 
     /**
