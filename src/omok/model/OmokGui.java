@@ -281,6 +281,146 @@ public class OmokGui extends JFrame {
         // Add the toolbar to the main panel
         mainPanel.add(toolBar, BorderLayout.SOUTH);
     }
+    private void JMenuBarp2p() {
+        gameBoard = new BoardPanel(omok);
+
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(gameBoard, BorderLayout.CENTER);
+
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu customMenu = new JMenu("Game Menu");
+
+        JMenuItem pairButton = new JMenuItem("Pair");
+        JMenuItem playButton = new JMenuItem("Play");
+        JMenuItem quitButton = new JMenuItem("Quit");
+
+        JMenuItem stopGameButton = new JMenuItem("Stop Game");
+
+        // Load icons
+        int desiredWidth = 15;  // Adjust the size of the icon
+        int desiredHeight = 15;
+
+        Icon restartIcon = new ImageIcon(OmokGui.class.getResource("Pair.jpeg"));
+        Image originalImageR = ((ImageIcon) restartIcon).getImage();
+        // Scale the image to the desired size
+        Image scaledImage = originalImageR.getScaledInstance(desiredWidth, desiredHeight, Image.SCALE_SMOOTH);
+        // Create a new ImageIcon from the scaled image
+        Icon resizedRestartIcon = new ImageIcon(scaledImage);
+
+        // Assuming desiredWidth and desiredHeight are defined earlier in your code
+        Icon stopIcon = new ImageIcon(OmokGui.class.getResource("play.png"));
+        Image originalImageStop = ((ImageIcon) stopIcon).getImage();
+        // Scale the image to the desired size
+        Image scaledImageStop = originalImageStop.getScaledInstance(desiredWidth, desiredHeight, Image.SCALE_SMOOTH);
+        // Create a new ImageIcon from the scaled image
+        Icon resizedStopIcon = new ImageIcon(scaledImageStop);
+        // Assuming desiredWidth and desiredHeight are defined earlier in your code
+
+        Icon resignIcon = new ImageIcon(OmokGui.class.getResource("stopIcon.png"));
+        Image originalImageResign = ((ImageIcon) resignIcon).getImage();
+        // Scale the image to the desired size
+        Image scaledImageResign = originalImageResign.getScaledInstance(desiredWidth, desiredHeight, Image.SCALE_SMOOTH);
+        // Create a new ImageIcon from the scaled image
+        Icon resizedResignIcon = new ImageIcon(scaledImageResign);
+
+        // Set icons for the menu items
+        pairButton.setIcon(resizedRestartIcon);
+        playButton.setIcon(resizedStopIcon);
+        quitButton.setIcon(resizedResignIcon);
+
+        customMenu.add(pairButton);
+        customMenu.add(playButton);
+        customMenu.add(quitButton);
+
+        menuBar.add(customMenu);
+        setJMenuBar(menuBar); // Set the menu bar for the frame
+
+
+
+        setLocationRelativeTo(null);
+        pack();
+        setVisible(true);
+        pairButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // Generate a random integer between 9000 and 9500
+                //Random random = new Random();
+                //int randomPort = random.nextInt(501) + 9000;
+                //pairDialog=new PairDialog(randomPort);
+                pairDialog.setVisible(true);
+                pairDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+
+
+            }
+
+        });
+        //if stop game button is clicked, show confirm dialog
+        quitButton.addActionListener(e -> {
+            //clear board
+            omok.clear();
+            //revert to game start screen menu
+            GameStartScreen();
+            //reset player turns
+            currentPlayer=p1;
+            addGameBoardActionListener(gameBoard);
+
+            gameBoard.setGameOver(false);
+            gameIsRunning=false;
+
+            if(networkAdapter!=null){
+                networkAdapter.writeQuit();
+                networkAdapter.close();
+            }
+
+        });
+
+        OmokGui omokGui=this;
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //System.out.println(pairDialog.isConnected());
+
+                if(pairDialog.isConnected()){
+                    if(!networkAdapterMessageListenerIsOn){
+                        //createNetworkAdapterMessageListener();
+                    }
+                    isRequestor=true;
+                    isReceiver=false;
+
+                    omokGui.setExpectingPlay(false);
+                    omok.switchTurns();
+                    pairDialog.networkAdapter().writePlay();
+
+                    omokGui.setExpectingPlayAck(true);
+                    omokGui.setExpectingMove(true);
+                    omokGui.setExpectingMoveAck(false);
+                }
+
+            }
+        });
+
+        //create new toolbar
+        JToolBar toolBar = new JToolBar();
+
+        //Create buttons for the toolbar
+        JButton button1 = new JButton("Info");
+
+
+        //Add action listeners to the buttons
+        button1.addActionListener(e -> {
+            //Display an information message when button1 is clicked
+            String message = "Welcome to the Omok Game!\n The player who achieves five stones in a row wins.";
+            String title = "Omok Game Info";
+            JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+        });
+        // Add buttons to the toolbar
+        toolBar.add(button1);
+        // Add the toolbar to the main panel
+        mainPanel.add(toolBar, BorderLayout.SOUTH);
+    }
     //confirm dialog
     private void showConfirmationDialog() {
         int option = JOptionPane.showConfirmDialog(
@@ -479,7 +619,7 @@ public class OmokGui extends JFrame {
                     System.out.println(449);
 
                     //add menu bar to screen
-                    JMenuBar();
+                    JMenuBarp2p();
 
                     //add game board to screen
                     Game();
@@ -490,21 +630,16 @@ public class OmokGui extends JFrame {
                     gameIsRunning=false;
                     //show pair with other player screen before starting game
                     //pairWithPlayerScreen();
-                    addPairButton();
+                    /*addPairButton();
                     addPairButtonActionListener();
                     addPairPlayButton();
-                    addPairPlayButtonActionListener();
+                    addPairPlayButtonActionListener();*/
+                    //addQuitButton();
                     // Generate a random integer between 9000 and 9500
                     Random random = new Random();
                     int randomPort = random.nextInt(501) + 9000;
                     pairDialog=new PairDialog(omokGui,randomPort);
                     //new Thread(new ListenForMoveThread(omokGui,pairDialog)).start();
-
-
-
-
-
-
                 }
 
 
@@ -512,55 +647,29 @@ public class OmokGui extends JFrame {
             }
         });
     }
-    public void addPairButton(){
-        pairButton = new JButton("Pair with Player");
+    /*public void addQuitButton() {
+        JButton quitButton = new JButton("Quit");
+        Dimension quitButtonSize = new Dimension(275, 30); // Adjust the width and height as needed
+        quitButton.setPreferredSize(quitButtonSize);
+        quitButton.setSize(quitButtonSize);
+        add(quitButton, BorderLayout.NORTH);
 
-        // Set the preferred size of the button
-        Dimension buttonSize = new Dimension(275, 30); // Adjust the width and height as needed
-        pairButton.setPreferredSize(buttonSize);
-        //add(pairButton,BorderLayout.NORTH);
-
-
-
-
-
-        // Set the preferred size of the button
-        Dimension pairButtonSize = new Dimension(275, 30); // Adjust the width and height as needed
-        ;
-        pairButton.setSize(pairButtonSize);
-
-        add(pairButton,BorderLayout.NORTH);
-
-
-
-    }
-    public void addPairPlayButton(){
-        pairPlayButton = new JButton("Play P2P Game");
-        Dimension pairPlayButtonSize = new Dimension(275, 30); // Adjust the width and height as needed
-        pairPlayButton.setPreferredSize(pairPlayButtonSize);
-        pairPlayButton.setSize(pairPlayButtonSize);
-        add(pairPlayButton,BorderLayout.NORTH);
-
-
-    }
-    public void addPairButtonActionListener(){
-        pairButton.addActionListener(new ActionListener() {
+        ActionListener quitButtonListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                // Generate a random integer between 9000 and 9500
-                //Random random = new Random();
-                //int randomPort = random.nextInt(501) + 9000;
-                //pairDialog=new PairDialog(randomPort);
-                pairDialog.setVisible(true);
-                pairDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-
-
+                // Perform actions when Quit button is clicked
+                // For example, you can close the window
+                dispose();  // Close the current JFrame
             }
+        };
 
-        });
-    }
+        // Add the same listener to the Quit button
+        quitButton.addActionListener(quitButtonListener);
+
+        // Add the listener to the Pair button as well
+        pairButton.addActionListener(quitButtonListener);
+    }*/
+
     public void removePairButtonActionListener() {
         ActionListener[] actionListeners = pairButton.getActionListeners();
 
@@ -568,55 +677,9 @@ public class OmokGui extends JFrame {
             pairButton.removeActionListener(listener);
         }
     }
-    public void addPairPlayButtonActionListener(){
-        OmokGui omokGui=this;
-
-
-
-        pairPlayButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println(pairDialog.isConnected());
-
-                if(pairDialog.isConnected()){
-                    if(!networkAdapterMessageListenerIsOn){
-                        //createNetworkAdapterMessageListener();
-                    }
-
-
-                    isRequestor=true;
-                    isReceiver=false;
-
-                    omokGui.setExpectingPlay(false);
-                    omok.switchTurns();
-                    pairDialog.networkAdapter().writePlay();
-
-                    omokGui.setExpectingPlayAck(true);
-                    omokGui.setExpectingMove(true);
-                    omokGui.setExpectingMoveAck(false);
-
-
-
-
-
-
-
-
-                }
-
-            }
-        });
-    }
-
-
     public void removePairButton(){
         remove(pairButton);
     }
-
-
-
-
 
 
     //checks for win and makes board unclickable
@@ -738,6 +801,7 @@ public class OmokGui extends JFrame {
                             //if game is won after stone placed, remove gameboard action listener making it unclickable
                             if(omok.isWonBy(p1)||omok.isWonBy(p2)){
                                 removeGameBoardActionListener(gameBoard);
+
                                 gameBoard.paintComponent(g);
                                 gameIsRunning=false;
                                 omok.switchTurns();
@@ -781,12 +845,22 @@ public class OmokGui extends JFrame {
 
                             gameBoard.paintComponent(g);
                             System.out.println("PAINT COMPONENT");
-
                         }
                         break;
 
                     case QUIT:
                         //hasQuit=true;
+                        //clear board
+                        omok.clear();
+                        //revert to game start screen menu
+                        GameStartScreen();
+                        //reset player turns
+                        currentPlayer=p1;
+                        addGameBoardActionListener(gameBoard);
+
+                        gameBoard.setGameOver(false);
+                        gameIsRunning=false;
+                        networkAdapter.close();
 
                         break;
 
@@ -832,69 +906,3 @@ public class OmokGui extends JFrame {
 
 
 }
-
-
-
-
-
-/*
-                    case MOVE:
-                        if(expectingMove){
-                            System.out.println("port: "+pairDialog.getPort()+" RECEIVED A MOVE, x:"+x+" y:"+y);
-                            pairDialog.msgDisplay().append("move: ");
-
-                            //hasMove=true;
-                            currentPlayer=omok.getCurrentPlayer();
-                            omok.placeStone(x,y,currentPlayer);
-
-                            //if game is won after stone placed, remove gameboard action listener making it unclickable
-                            if(omok.isWonBy(p1)||omok.isWonBy(p2)){
-                                removeGameBoardActionListener(gameBoard);
-                                gameBoard.paintComponent(g);
-                                gameIsRunning=false;
-
-                            }
-                            //if game isnt over, switch turns
-                            else{
-                                setExpectingMoveAck(false);
-                                //setExpectingMove(true);  DELETED
-
-                                setExpectingMove(false);//ADDED
-
-                                omok.switchTurns();
-                                gameBoard.paintComponent(g);
-                                //if the opponent is on network playing p2p, make gameboard unclickable during their turn
-
-                                //write play acknowledge on network
-                                pairDialog.networkAdapter().writeMoveAck(x,y);
-
-                                addGameBoardActionListener(gameBoard);
-
-                                //setExpectingMoveAck(false); DELETED
-                                setExpectingMoveAck(true);
-                                //setExpectingMove(true); DELETED
-                                setExpectingMove(false);//ADDED
-
-                            }
-                        }
-                        break;
-
-
-                    case MOVE_ACK:
-                        if(expectingMoveAck){
-
-                            //setExpectingMove(false); DELETED
-                            setExpectingMove(true);
-                            //setExpectingMoveAck(true); DELETED
-                            setExpectingMoveAck(false);//ADDED
-
-                            omok.switchTurns();//ADDED
-
-                            System.out.println("port: "+pairDialog.getPort()+" RECEIVED A MOVE ACK, x: "+x+" y: "+y);
-                            pairDialog.msgDisplay().append("move_ack: ");
-                            //hasMoveAck=true;
-                            removeGameBoardActionListener(gameBoard);
-                        }
-                        break;
-
-                     */

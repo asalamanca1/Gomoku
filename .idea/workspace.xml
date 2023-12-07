@@ -9,9 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d488d1b8-2983-4b60-9c49-8ce4423baa61" name="Changes" comment="P2P Implemented">
+    <list default="true" id="d488d1b8-2983-4b60-9c49-8ce4423baa61" name="Changes" comment="Correct winner is being displayed on board">
+      <change afterPath="$PROJECT_DIR$/src/omok/model/pair.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/omok/model/play.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/omok/model/BoardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/omok/model/BoardPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/omok/model/OmokGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/omok/model/OmokGui.java" afterDir="false" />
     </list>
     <list id="96982cc9-7b8d-453a-8c03-156924e6446e" name="Changes by magarciajac" comment="" />
@@ -217,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701844362727</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Correct winner is being displayed on board">
+      <option name="closed" value="true" />
+      <created>1701918525134</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1701918525134</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -243,7 +252,8 @@
     <MESSAGE value="hw4" />
     <MESSAGE value="before p2p logic was added" />
     <MESSAGE value="P2P Implemented" />
-    <option name="LAST_COMMIT_MESSAGE" value="P2P Implemented" />
+    <MESSAGE value="Correct winner is being displayed on board" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correct winner is being displayed on board" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
