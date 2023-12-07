@@ -9,17 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d488d1b8-2983-4b60-9c49-8ce4423baa61" name="Changes" comment="before p2p logic was added">
-      <change afterPath="$PROJECT_DIR$/src/omok/net/ListenForConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/omok/net/ListenForMoveThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/omok/net/NetworkAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/omok/net/PairDialog.java" afterDir="false" />
+    <list default="true" id="d488d1b8-2983-4b60-9c49-8ce4423baa61" name="Changes" comment="P2P Implemented">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/omok/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/omok/model/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/omok/model/BoardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/omok/model/BoardPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/omok/model/OmokGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/omok/model/OmokGui.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/omok/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/omok/model/Player.java" afterDir="false" />
     </list>
     <list id="96982cc9-7b8d-453a-8c03-156924e6446e" name="Changes by magarciajac" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +31,20 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;asalamanca1&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="7e1ad968-7e3b-48f5-ab46-6f45dc85f145" />
+        <option name="url" value="https://github.com/asalamanca1/Gomoku.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -194,7 +201,23 @@
       <option name="project" value="LOCAL" />
       <updated>1701312639271</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="P2P Implemented">
+      <option name="closed" value="true" />
+      <created>1701844315816</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1701844315816</updated>
+    </task>
+    <task id="LOCAL-00013" summary="P2P Implemented">
+      <option name="closed" value="true" />
+      <created>1701844362727</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1701844362727</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -219,7 +242,8 @@
     <MESSAGE value="automateMove added" />
     <MESSAGE value="hw4" />
     <MESSAGE value="before p2p logic was added" />
-    <option name="LAST_COMMIT_MESSAGE" value="before p2p logic was added" />
+    <MESSAGE value="P2P Implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="P2P Implemented" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -233,14 +257,10 @@
           </properties>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/omok/model/Board.java</url>
-          <line>184</line>
-          <properties class="omok.model.Board" method="playerAt">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="2" />
+          <line>185</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -239,52 +239,57 @@ public class BoardPanel extends JPanel{
             g.drawRect(50,50,200,13);
             g.fillRect(50,50,200,13);
             g.setColor(Color.BLACK);
+
             if(p2==currentPlayer){
 
                 g.drawString("PLAYER 2 HAS WON GAME",50,50);
-                if(p1.isOnNetwork()||p2.isOnNetwork()){
+                if(!currentPlayer.isWinner()){
 
 
-                    if(currentPlayer.isWinner()){
-                        g.setColor(Color.WHITE);
-                        g.drawRect(50,33,200,13);
-                        g.fillRect(50,33,200,13);
-                        g.setColor(Color.BLACK);
 
-                        g.drawString("CONGRATULATIONS YOU WON THE GAME!",50,50);
-                    }
-                    else{
-                        g.setColor(Color.WHITE);
-                        g.drawRect(50,33,200,13);
-                        g.fillRect(50,33,200,13);
-                        g.setColor(Color.BLACK);
-                        g.drawString("OPPONENT HAS WON GAME... YOU LOSE!",50,50);
-                    }
+                    g.setColor(Color.WHITE);
+                    g.drawRect(50,39,200,13);
+                    g.fillRect(50,39,200,13);
+                    g.setColor(Color.BLACK);
 
+                    g.drawString("YOU HAVE LOST GAME...",50,50);
+
+
+
+                }
+                else{
+                    g.setColor(Color.WHITE);
+                    g.drawRect(50,39,200,13);
+                    g.fillRect(50,39,200,13);
+                    g.setColor(Color.BLACK);
+
+                    g.drawString("CONGRATULATIONS YOU WON THE GAME!",50,50);
                 }
                 g.drawString("GAME OVER",550,50);
             }
             else {
                 g.drawString("PLAYER 1 HAS WON GAME",50,50);
-                if(p1.isOnNetwork()||p2.isOnNetwork()){
+                if(!currentPlayer.isWinner()){
 
-                    if(currentPlayer.isWinner()){
-                        g.setColor(Color.WHITE);
-                        g.drawRect(50,33,200,13);
-                        g.fillRect(50,33,200,13);
-                        g.setColor(Color.BLACK);
 
-                        g.drawString("OPPONENT HAS WON GAME... YOU LOSE!",50,50);
-                    }
-                    else{
-                        g.setColor(Color.WHITE);
-                        g.drawRect(50,33,200,13);
-                        g.fillRect(50,33,200,13);
-                        g.setColor(Color.BLACK);
 
-                        g.drawString("CONGRATULATIONS YOU WON THE GAME!",50,50);
-                    }
+                    g.setColor(Color.WHITE);
+                    g.drawRect(50,39,200,13);
+                    g.fillRect(50,39,200,13);
+                    g.setColor(Color.BLACK);
 
+                    g.drawString("YOU HAVE LOST GAME...",50,50);
+
+
+
+                }
+                else{
+                    g.setColor(Color.WHITE);
+                    g.drawRect(50,39,200,13);
+                    g.fillRect(50,39,200,13);
+                    g.setColor(Color.BLACK);
+
+                    g.drawString("CONGRATULATIONS YOU WON THE GAME!",50,50);
                 }
                 g.drawString("GAME OVER",550,50);
             }

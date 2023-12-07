@@ -370,6 +370,9 @@ public class OmokGui extends JFrame {
                             omok.switchTurns();
                             pairDialog.networkAdapter().writeMoveAck(x,y);
 
+                            p1.setWinner(true);
+                            p2.setWinner(true);
+
 
                         }
                         //if game isnt over, switch turns
@@ -740,6 +743,9 @@ public class OmokGui extends JFrame {
                                 omok.switchTurns();
                                 pairDialog.networkAdapter().writeMoveAck(x,y);
 
+                                p1.setWinner(false);
+                                p2.setWinner(false);
+
 
 
                             }
@@ -775,6 +781,7 @@ public class OmokGui extends JFrame {
 
                             gameBoard.paintComponent(g);
                             System.out.println("PAINT COMPONENT");
+
                         }
                         break;
 
