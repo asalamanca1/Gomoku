@@ -9,11 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d488d1b8-2983-4b60-9c49-8ce4423baa61" name="Changes" comment="Correct winner is being displayed on board">
-      <change afterPath="$PROJECT_DIR$/src/omok/model/pair.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/omok/model/play.png" afterDir="false" />
+    <list default="true" id="d488d1b8-2983-4b60-9c49-8ce4423baa61" name="Changes" comment="hw5">
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Gomoku_jar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/omok/model/OmokGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/omok/model/OmokGui.java" afterDir="false" />
     </list>
     <list id="96982cc9-7b8d-453a-8c03-156924e6446e" name="Changes by magarciajac" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -226,7 +224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701918525134</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="hw5">
+      <option name="closed" value="true" />
+      <created>1701976155887</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1701976155887</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -253,7 +259,8 @@
     <MESSAGE value="before p2p logic was added" />
     <MESSAGE value="P2P Implemented" />
     <MESSAGE value="Correct winner is being displayed on board" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correct winner is being displayed on board" />
+    <MESSAGE value="hw5" />
+    <option name="LAST_COMMIT_MESSAGE" value="hw5" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
